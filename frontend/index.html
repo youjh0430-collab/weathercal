@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WeatherCal — 날씨 맞춤 캘린더</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <header class="header">
+        <h1>🌤 WeatherCal</h1>
+        <span class="location">서울</span>
+    </header>
+
+    <main class="main-content">
+        <section class="calendar-section">
+            <div class="calendar-nav">
+                <button id="prev-month" class="nav-btn">◀</button>
+                <h2 id="current-month"></h2>
+                <button id="next-month" class="nav-btn">▶</button>
+            </div>
+            <div id="calendar-grid" class="calendar-grid">
+                <div class="day-header">월</div>
+                <div class="day-header">화</div>
+                <div class="day-header">수</div>
+                <div class="day-header">목</div>
+                <div class="day-header">금</div>
+                <div class="day-header">토</div>
+                <div class="day-header">일</div>
+            </div>
+            <button id="add-schedule-btn" class="add-btn">+ 일정 추가</button>
+        </section>
+
+        <aside id="briefing-panel" class="briefing-panel hidden">
+            <div class="briefing-header">
+                <h3 id="briefing-date"></h3>
+                <button id="close-briefing" class="close-btn">✕</button>
+            </div>
+            <div id="briefing-content"></div>
+            <button id="add-schedule-date-btn" class="add-btn">+ 이 날 일정 추가</button>
+        </aside>
+    </main>
+
+    <div id="schedule-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">📝 일정 추가</h3>
+                <button id="close-modal" class="close-btn">✕</button>
+            </div>
+            <form id="schedule-form">
+                <div class="form-group">
+                    <label for="input-title">제목</label>
+                    <input type="text" id="input-title" placeholder="일정 제목을 입력하세요" required>
+                </div>
+                <div class="form-group">
+                    <label for="input-date">날짜</label>
+                    <input type="date" id="input-date" required>
+                </div>
+                <div class="form-group">
+                    <label for="input-time">시간</label>
+                    <input type="time" id="input-time">
+                </div>
+                <div class="form-group">
+                    <label>분류</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="category" value="outdoor"> 야외</label>
+                        <label><input type="radio" name="category" value="indoor" checked> 실내</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="input-memo">메모</label>
+                    <textarea id="input-memo" placeholder="메모 (선택)"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" id="cancel-btn" class="btn-secondary">취소</button>
+                    <button type="submit" class="btn-primary">저장</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="/js/api.js"></script>
+    <script src="/js/calendar.js"></script>
+    <script src="/js/briefing.js"></script>
+    <script src="/js/schedule.js"></script>
+</body>
+</html>
