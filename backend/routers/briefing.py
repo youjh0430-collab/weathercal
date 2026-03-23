@@ -35,7 +35,7 @@ def get_briefing(date: str, station: str = "서울"):
             "warnings": warnings
         })
 
-    recommendations = get_recommendations(weather) if weather else []
+    recommendations = get_recommendations(weather, date=date) if weather else []
 
     return {
         "date": date,

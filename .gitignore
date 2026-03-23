@@ -2,3 +2,5 @@
 __pycache__/
 *.db
 *.pyc
+.claude/
+참고이미지/

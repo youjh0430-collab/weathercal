@@ -39,6 +39,8 @@ def init_db():
             date TEXT NOT NULL,
             station TEXT NOT NULL DEFAULT '서울',
             temperature REAL,
+            temp_min REAL,
+            temp_max REAL,
             condition TEXT,
             humidity REAL,
             wind_speed REAL,

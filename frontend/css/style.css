@@ -111,6 +111,17 @@ body {
     border: 2px solid #4a90d9;
 }
 
+.day-cell.selected {
+    background: #f0f4ff;
+    border: 2px solid #a0b8e0;
+}
+
+/* 오늘이면서 선택된 경우 — 오늘 스타일 유지 */
+.day-cell.today.selected {
+    background: #dce8fc;
+    border: 2px solid #4a90d9;
+}
+
 /* 날짜 + 날씨 아이콘 상단 행 */
 .day-top {
     display: flex;
@@ -171,16 +182,34 @@ body {
     box-shadow: 0 2px 12px rgba(0,0,0,0.1);
     padding: 20px;
     max-height: calc(100vh - 120px);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* 브리핑 콘텐츠 — 스크롤 영역 */
+#briefing-content {
+    flex: 1;
     overflow-y: auto;
+    min-height: 0;
+}
+
+/* 하단 일정 추가 버튼 — 스크롤 밖 고정 */
+.briefing-panel > .add-btn {
+    flex-shrink: 0;
 }
 
 .briefing-panel.hidden { display: none; }
+
+/* 드래그 핸들 — 데스크톱에서는 숨김 */
+.briefing-handle { display: none; }
 
 .briefing-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 16px;
+    flex-shrink: 0;
 }
 
 .briefing-header h3 { font-size: 1.1rem; }
@@ -434,17 +463,24 @@ body {
         box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
         z-index: 50;
         padding: 16px;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
     }
 
-    /* 브리핑 패널 상단 드래그 핸들 표시 */
-    .briefing-header::before {
-        content: '';
-        display: block;
+    /* 브리핑 패널 상단 드래그 핸들 — 패널 최상단 중앙 정렬 */
+    .briefing-handle {
+        width: 100%;
+        text-align: center;
+        padding: 4px 0 8px;
+    }
+
+    .briefing-handle span {
+        display: inline-block;
         width: 40px;
         height: 4px;
-        background: #ddd;
+        background: #ccc;
         border-radius: 2px;
-        margin: 0 auto 12px;
     }
 
     /* 일정 추가 버튼 */

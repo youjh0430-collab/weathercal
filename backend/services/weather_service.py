@@ -133,6 +133,8 @@ def fetch_asos(station_name: str, start_date: str, end_date: str):
     for item in items:
         date_str = item.get("tm", "")
         avg_ta = item.get("avgTa")
+        min_ta = item.get("minTa")
+        max_ta = item.get("maxTa")
         avg_rhm = item.get("avgRhm")
         avg_ws = item.get("avgWs")
         sum_rn = item.get("sumRn")
@@ -143,6 +145,8 @@ def fetch_asos(station_name: str, start_date: str, end_date: str):
         result.append({
             "date": date_str,
             "temperature": float(avg_ta) if avg_ta else None,
+            "temp_min": float(min_ta) if min_ta else None,
+            "temp_max": float(max_ta) if max_ta else None,
             "condition": condition,
             "humidity": round(float(avg_rhm)) if avg_rhm else None,
             "wind_speed": round(float(avg_ws), 1) if avg_ws else None,
@@ -211,12 +215,23 @@ def fetch_vilage_forecast(station_name: str):
         humidity = vals.get("REH")
         wind = vals.get("WSD")
 
+        # TMN(최저)은 0600, TMX(최고)는 1500에 발표 — 날짜 내 전체 시간에서 탐색
+        temp_min = None
+        temp_max = None
+        for t, t_vals in times.items():
+            if "TMN" in t_vals and t_vals["TMN"]:
+                temp_min = float(t_vals["TMN"])
+            if "TMX" in t_vals and t_vals["TMX"]:
+                temp_max = float(t_vals["TMX"])
+
         formatted_date = f"{date_str[:4]}-{date_str[4:6]}-{date_str[6:]}"
         row_date = datetime.strptime(date_str, "%Y%m%d").date()
 
         result.append({
             "date": formatted_date,
             "temperature": float(temp) if temp else None,
+            "temp_min": temp_min,
+            "temp_max": temp_max,
             "condition": condition,
             "humidity": round(float(humidity)) if humidity else None,
             "wind_speed": round(float(wind), 1) if wind else None,
@@ -299,9 +314,14 @@ def fetch_mid_forecast(station_name: str):
 
         condition = _mid_sky_to_condition(sky_text)
 
+        t_min = float(min_temp) if min_temp is not None else None
+        t_max = float(max_temp) if max_temp is not None else None
+
         result.append({
             "date": date_str,
             "temperature": avg_temp,
+            "temp_min": t_min,
+            "temp_max": t_max,
             "condition": condition,
             "humidity": None,
             "wind_speed": None,
@@ -344,6 +364,8 @@ def get_weather_for_month(month: str, station_name: str = "서울"):
         result.append({
             "date": row["date"],
             "temperature": row["temperature"],
+            "temp_min": row["temp_min"],
+            "temp_max": row["temp_max"],
             "condition": row["condition"],
             "humidity": row["humidity"],
             "wind_speed": row["wind_speed"],
@@ -371,6 +393,8 @@ def get_weather_for_date(date: str, station_name: str = "서울"):
     return {
         "date": row["date"],
         "temperature": row["temperature"],
+        "temp_min": row["temp_min"],
+        "temp_max": row["temp_max"],
         "condition": row["condition"],
         "humidity": row["humidity"],
         "wind_speed": row["wind_speed"],
@@ -397,30 +421,30 @@ def _refresh_weather_cache(station_name: str):
             ).fetchone()
             if not existing:
                 conn.execute(
-                    """INSERT INTO weather_cache (date, station, temperature, condition, humidity, wind_speed, icon, fetched_at)
-                       VALUES (?, ?, ?, ?, ?, ?, ?, datetime('now', 'localtime'))""",
-                    (item["date"], station_name, item["temperature"], item["condition"],
-                     item["humidity"], item["wind_speed"], item["icon"])
+                    """INSERT INTO weather_cache (date, station, temperature, temp_min, temp_max, condition, humidity, wind_speed, icon, fetched_at)
+                       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now', 'localtime'))""",
+                    (item["date"], station_name, item["temperature"], item["temp_min"], item["temp_max"],
+                     item["condition"], item["humidity"], item["wind_speed"], item["icon"])
                 )
 
     # 2. 단기예보 — 오늘~3일 후
     vilage_data = fetch_vilage_forecast(station_name)
     for item in vilage_data:
         conn.execute(
-            """INSERT OR REPLACE INTO weather_cache (date, station, temperature, condition, humidity, wind_speed, icon, fetched_at)
-               VALUES (?, ?, ?, ?, ?, ?, ?, datetime('now', 'localtime'))""",
-            (item["date"], station_name, item["temperature"], item["condition"],
-             item["humidity"], item["wind_speed"], item["icon"])
+            """INSERT OR REPLACE INTO weather_cache (date, station, temperature, temp_min, temp_max, condition, humidity, wind_speed, icon, fetched_at)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now', 'localtime'))""",
+            (item["date"], station_name, item["temperature"], item["temp_min"], item["temp_max"],
+             item["condition"], item["humidity"], item["wind_speed"], item["icon"])
         )
 
     # 3. 중기예보 — 4일~10일 후
     mid_data = fetch_mid_forecast(station_name)
     for item in mid_data:
         conn.execute(
-            """INSERT OR REPLACE INTO weather_cache (date, station, temperature, condition, humidity, wind_speed, icon, fetched_at)
-               VALUES (?, ?, ?, ?, ?, ?, ?, datetime('now', 'localtime'))""",
-            (item["date"], station_name, item["temperature"], item["condition"],
-             item["humidity"], item["wind_speed"], item["icon"])
+            """INSERT OR REPLACE INTO weather_cache (date, station, temperature, temp_min, temp_max, condition, humidity, wind_speed, icon, fetched_at)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now', 'localtime'))""",
+            (item["date"], station_name, item["temperature"], item["temp_min"], item["temp_max"],
+             item["condition"], item["humidity"], item["wind_speed"], item["icon"])
         )
 
     conn.commit()

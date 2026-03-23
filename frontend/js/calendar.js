@@ -135,7 +135,12 @@ function renderDays() {
             }
         }
 
-        cell.addEventListener('click', () => openBriefing(dateStr));
+        cell.addEventListener('click', () => {
+            // 이전 선택 해제 후 현재 셀에 선택 표시
+            document.querySelectorAll('.day-cell.selected').forEach(el => el.classList.remove('selected'));
+            cell.classList.add('selected');
+            openBriefing(dateStr);
+        });
 
         grid.appendChild(cell);
     }

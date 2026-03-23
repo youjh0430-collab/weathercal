@@ -27,8 +27,8 @@ async function openBriefing(dateStr) {
             <div class="card weather-card">
                 <div class="card-icon">${icon}</div>
                 <div class="card-body">
-                    <div class="weather-main">${w.condition} ${w.temperature}°C</div>
-                    <div class="weather-detail">습도 ${w.humidity}% | 풍속 ${w.wind_speed}m/s</div>
+                    <div class="weather-main">${w.condition} ${w.temp_min != null && w.temp_max != null ? `${w.temp_min}° / ${w.temp_max}°` : `${w.temperature}°C`}</div>
+                    <div class="weather-detail">${[w.humidity != null ? `습도 ${w.humidity}%` : '', w.wind_speed != null ? `풍속 ${w.wind_speed}m/s` : ''].filter(Boolean).join(' | ') || ''}</div>
                 </div>
             </div>
         `;
