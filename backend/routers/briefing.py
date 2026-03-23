@@ -13,9 +13,9 @@ router = APIRouter(prefix="/api/briefing", tags=["브리핑"])
 
 
 @router.get("/{date}")
-def get_briefing(date: str):
+def get_briefing(date: str, station: str = "서울"):
     """특정일 브리핑 — 날씨 + 일정 + 경고 + 추천"""
-    weather = get_weather_for_date(date)
+    weather = get_weather_for_date(date, station)
 
     conn = get_connection()
     rows = conn.execute(
