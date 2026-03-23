@@ -36,14 +36,15 @@ def init_db():
 
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS weather_cache (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            date TEXT NOT NULL UNIQUE,
+            date TEXT NOT NULL,
+            station TEXT NOT NULL DEFAULT '서울',
             temperature REAL,
             condition TEXT,
-            humidity INTEGER,
+            humidity REAL,
             wind_speed REAL,
             icon TEXT,
-            fetched_at TEXT DEFAULT (datetime('now', 'localtime'))
+            fetched_at TEXT DEFAULT (datetime('now', 'localtime')),
+            PRIMARY KEY (date, station)
         )
     """)
 
