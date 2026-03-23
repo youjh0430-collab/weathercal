@@ -15,10 +15,10 @@ def get_warnings(category: str, weather: dict) -> list[str]:
     temp = weather.get("temperature")
     wind = weather.get("wind_speed")
 
-    if condition in ("Rain", "Drizzle", "Thunderstorm"):
+    if condition in ("비", "비/눈"):
         warnings.append("🌧 비 예보가 있어요, 우산을 챙기세요")
 
-    if condition == "Snow":
+    if condition in ("눈", "비/눈"):
         warnings.append("🌨 눈 예보가 있어요, 미끄럼에 주의하세요")
 
     if temp is not None and temp < 0:
