@@ -25,7 +25,20 @@ body {
 }
 
 .header h1 { font-size: 1.4rem; }
-.location { font-size: 0.9rem; opacity: 0.9; }
+.location-select {
+    background: rgba(255,255,255,0.2);
+    color: white;
+    border: 1px solid rgba(255,255,255,0.4);
+    border-radius: 6px;
+    padding: 4px 8px;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.location-select option {
+    color: #333;
+    background: white;
+}
 
 .main-content {
     display: flex;
@@ -79,12 +92,12 @@ body {
 .day-cell {
     background: white;
     min-height: 80px;
-    padding: 8px;
+    padding: 6px;
     cursor: pointer;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 4px;
+    align-items: stretch;
+    gap: 2px;
     border: 1px solid #f0f0f0;
     transition: background 0.15s;
 }
@@ -98,23 +111,43 @@ body {
     border: 2px solid #4a90d9;
 }
 
+/* 날짜 + 날씨 아이콘 상단 행 */
+.day-top {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
 .date-number {
     font-weight: 600;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
 }
 
 .weather-icon {
-    font-size: 1.3rem;
+    font-size: 0.95rem;
 }
 .weather-icon.past {
     filter: grayscale(100%);
     opacity: 0.5;
 }
 
-.schedule-dot {
-    color: #4a90d9;
-    font-size: 1.2rem;
-    line-height: 1;
+/* 일정 제목 미리보기 */
+.schedule-preview {
+    font-size: 0.7rem;
+    color: #fff;
+    background: #4a90d9;
+    border-radius: 3px;
+    padding: 1px 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.4;
+}
+
+.schedule-more {
+    font-size: 0.65rem;
+    color: #888;
+    padding-left: 2px;
 }
 
 .add-btn {
@@ -385,9 +418,9 @@ body {
         gap: 2px;
     }
 
-    .date-number { font-size: 0.8rem; }
-    .weather-icon { font-size: 1rem; }
-    .schedule-dot { font-size: 1rem; }
+    .date-number { font-size: 0.75rem; }
+    .weather-icon { font-size: 0.85rem; }
+    .schedule-preview { font-size: 0.6rem; }
 
     /* 브리핑 패널 — 모바일에서 하단 슬라이드 오버레이 */
     .briefing-panel {
@@ -472,8 +505,9 @@ body {
         padding: 3px 1px;
     }
 
-    .date-number { font-size: 0.7rem; }
-    .weather-icon { font-size: 0.85rem; }
+    .date-number { font-size: 0.65rem; }
+    .weather-icon { font-size: 0.75rem; }
+    .schedule-preview { font-size: 0.55rem; }
 
     .calendar-nav h2 { font-size: 1rem; }
 }

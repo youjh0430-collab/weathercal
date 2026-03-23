@@ -1,10 +1,14 @@
 /**
  * Role: 서버 API 호출 래퍼
- * Key Features: fetch 기반 GET/POST/PUT/DELETE
+ * Key Features: fetch 기반 GET/POST/PUT/DELETE, 지역(station) 파라미터 지원
  * Dependencies: 없음
  */
 
 const API_BASE = '/api';
+
+function getStation() {
+    return document.getElementById('station-select').value;
+}
 
 const api = {
     async getSchedules(month) {
@@ -50,12 +54,14 @@ const api = {
     },
 
     async getWeather(month) {
-        const res = await fetch(`${API_BASE}/weather?month=${month}`);
+        const station = getStation();
+        const res = await fetch(`${API_BASE}/weather?month=${month}&station=${encodeURIComponent(station)}`);
         return res.json();
     },
 
     async getBriefing(date) {
-        const res = await fetch(`${API_BASE}/briefing/${date}`);
+        const station = getStation();
+        const res = await fetch(`${API_BASE}/briefing/${date}?station=${encodeURIComponent(station)}`);
         return res.json();
     }
 };
