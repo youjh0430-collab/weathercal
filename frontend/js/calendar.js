@@ -5,15 +5,12 @@
  */
 
 const WEATHER_ICONS = {
-    '01d': '☀️', '01n': '🌙',
-    '02d': '🌤', '02n': '☁️',
-    '03d': '⛅', '03n': '⛅',
-    '04d': '☁️', '04n': '☁️',
-    '09d': '🌧', '09n': '🌧',
-    '10d': '🌦', '10n': '🌧',
-    '11d': '⛈', '11n': '⛈',
-    '13d': '🌨', '13n': '🌨',
-    '50d': '🌫', '50n': '🌫'
+    'sunny': '☀️',
+    'partly_cloudy': '⛅',
+    'cloudy': '☁️',
+    'rain': '🌧',
+    'snow': '🌨',
+    'sleet': '🌧',
 };
 
 let currentYear, currentMonth;
@@ -27,6 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('prev-month').addEventListener('click', () => changeMonth(-1));
     document.getElementById('next-month').addEventListener('click', () => changeMonth(1));
+    document.getElementById('station-select').addEventListener('change', () => renderCalendar());
 
     renderCalendar();
 });
@@ -94,10 +92,14 @@ function renderDays() {
             cell.classList.add('today');
         }
 
+        // 상단 행: 날짜 + 날씨 아이콘을 나란히 배치
+        const topRow = document.createElement('div');
+        topRow.className = 'day-top';
+
         const dateNum = document.createElement('span');
         dateNum.className = 'date-number';
         dateNum.textContent = d;
-        cell.appendChild(dateNum);
+        topRow.appendChild(dateNum);
 
         const weather = weatherData[dateStr];
         if (weather && weather.icon) {
@@ -108,14 +110,29 @@ function renderDays() {
             if (weather.is_past) {
                 iconSpan.classList.add('past');
             }
-            cell.appendChild(iconSpan);
+            topRow.appendChild(iconSpan);
         }
 
+        cell.appendChild(topRow);
+
+        // 일정 제목을 한 줄씩 표시 (최대 2개 + 나머지 개수)
         if (scheduleData[dateStr] && scheduleData[dateStr].length > 0) {
-            const dot = document.createElement('span');
-            dot.className = 'schedule-dot';
-            dot.textContent = '•';
-            cell.appendChild(dot);
+            const maxShow = 2;
+            const schedules = scheduleData[dateStr];
+
+            schedules.slice(0, maxShow).forEach(s => {
+                const item = document.createElement('div');
+                item.className = 'schedule-preview';
+                item.textContent = s.title;
+                cell.appendChild(item);
+            });
+
+            if (schedules.length > maxShow) {
+                const more = document.createElement('div');
+                more.className = 'schedule-more';
+                more.textContent = `+${schedules.length - maxShow}개`;
+                cell.appendChild(more);
+            }
         }
 
         cell.addEventListener('click', () => openBriefing(dateStr));
