@@ -4,61 +4,109 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WeatherCal — 날씨 맞춤 캘린더</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#4a90d9">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <link rel="apple-touch-icon" href="/icons/icon-192.png">
 </head>
 <body>
     <header class="header">
-        <h1>🌤 WeatherCal</h1>
-        <select id="station-select" class="location-select">
-            <option value="서울" selected>서울</option>
-            <option value="부산">부산</option>
-            <option value="대구">대구</option>
-            <option value="인천">인천</option>
-            <option value="광주">광주</option>
-            <option value="대전">대전</option>
-            <option value="울산">울산</option>
-            <option value="세종">세종</option>
-            <option value="제주">제주</option>
-            <option value="수원">수원</option>
-            <option value="춘천">춘천</option>
-            <option value="청주">청주</option>
-            <option value="전주">전주</option>
-            <option value="포항">포항</option>
-            <option value="창원">창원</option>
-            <option value="강릉">강릉</option>
-        </select>
+        <h1 class="header-title">WeatherCal</h1>
+        <div class="header-location">
+            <span class="location-icon">📍</span>
+            <select id="station-select" class="location-select">
+                <option value="서울" selected>서울</option>
+                <option value="부산">부산</option>
+                <option value="대구">대구</option>
+                <option value="인천">인천</option>
+                <option value="광주">광주</option>
+                <option value="대전">대전</option>
+                <option value="울산">울산</option>
+                <option value="세종">세종</option>
+                <option value="제주">제주</option>
+                <option value="수원">수원</option>
+                <option value="춘천">춘천</option>
+                <option value="청주">청주</option>
+                <option value="전주">전주</option>
+                <option value="포항">포항</option>
+                <option value="창원">창원</option>
+                <option value="강릉">강릉</option>
+            </select>
+        </div>
     </header>
 
     <main class="main-content">
+        <!-- 좌측: 캘린더 -->
         <section class="calendar-section">
             <div class="calendar-nav">
-                <button id="prev-month" class="nav-btn">◀</button>
-                <h2 id="current-month"></h2>
-                <button id="next-month" class="nav-btn">▶</button>
+                <div class="month-label">
+                    <span class="year-label" id="current-year"></span>
+                    <h2 id="current-month"></h2>
+                </div>
+                <div class="nav-buttons">
+                    <button id="prev-month" class="nav-btn">‹</button>
+                    <button id="next-month" class="nav-btn">›</button>
+                </div>
             </div>
             <div id="calendar-grid" class="calendar-grid">
+                <div class="day-header sun">일</div>
                 <div class="day-header">월</div>
                 <div class="day-header">화</div>
                 <div class="day-header">수</div>
                 <div class="day-header">목</div>
                 <div class="day-header">금</div>
-                <div class="day-header">토</div>
-                <div class="day-header">일</div>
+                <div class="day-header sat">토</div>
             </div>
-            <button id="add-schedule-btn" class="add-btn">+ 일정 추가</button>
         </section>
 
-        <aside id="briefing-panel" class="briefing-panel hidden">
-            <div class="briefing-handle"><span></span></div>
-            <div class="briefing-header">
-                <h3 id="briefing-date"></h3>
-                <button id="close-briefing" class="close-btn">✕</button>
-            </div>
-            <div id="briefing-content"></div>
-            <button id="add-schedule-date-btn" class="add-btn">+ 이 날 일정 추가</button>
-        </aside>
+        <!-- 우측 사이드 영역 -->
+        <div class="side-panel">
+            <!-- 오늘 날씨 카드 -->
+            <section id="today-weather-card" class="today-weather">
+                <div class="today-weather-top">
+                    <span class="today-weather-label">오늘 날씨</span>
+                    <span class="today-weather-icon" id="today-weather-icon"></span>
+                </div>
+                <div class="today-weather-temp">
+                    <span id="today-temp">--</span><span class="temp-unit">°</span>
+                    <span class="today-weather-condition" id="today-condition"></span>
+                </div>
+                <div class="today-weather-details" id="today-details"></div>
+            </section>
+
+            <!-- 다가오는 일정 -->
+            <section class="upcoming-section">
+                <div class="section-header">
+                    <h3>다가오는 일정</h3>
+                </div>
+                <div id="upcoming-cards" class="upcoming-cards">
+                    <div class="upcoming-empty">등록된 일정이 없습니다</div>
+                </div>
+            </section>
+
+            <!-- 브리핑 패널 (PC: 사이드 인라인 / 모바일: 바텀시트) -->
+            <aside id="briefing-panel" class="briefing-panel hidden">
+                <div class="briefing-handle"><span></span></div>
+                <div class="briefing-header">
+                    <h3 id="briefing-date"></h3>
+                    <button id="close-briefing" class="close-btn">✕</button>
+                </div>
+                <div id="briefing-content"></div>
+                <button id="add-schedule-date-btn" class="add-btn briefing-add-btn">+ 이 날 일정 추가</button>
+            </aside>
+        </div>
     </main>
 
+    <!-- 모바일 브리핑 오버레이 -->
+    <div id="briefing-overlay" class="briefing-overlay hidden"></div>
+
+    <!-- FAB 버튼 -->
+    <button id="add-schedule-btn" class="fab-btn">+</button>
+
+    <!-- 일정 모달 -->
     <div id="schedule-modal" class="modal hidden">
         <div class="modal-content">
             <div class="modal-header">
@@ -97,6 +145,12 @@
         </div>
     </div>
 
+    <script>
+        // Service Worker 등록 — PWA 설치 지원
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js');
+        }
+    </script>
     <script src="/js/api.js"></script>
     <script src="/js/calendar.js"></script>
     <script src="/js/briefing.js"></script>

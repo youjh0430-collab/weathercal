@@ -224,6 +224,22 @@ def fetch_vilage_forecast(station_name: str):
             if "TMX" in t_vals and t_vals["TMX"]:
                 temp_max = float(t_vals["TMX"])
 
+        # TMN/TMX가 없으면 각 시간대 TMP 값에서 최소/최고 계산으로 보완
+        if temp_min is None or temp_max is None:
+            all_temps = []
+            for t, t_vals in times.items():
+                t_val = t_vals.get("TMP") or t_vals.get("T1H")
+                if t_val:
+                    try:
+                        all_temps.append(float(t_val))
+                    except (ValueError, TypeError):
+                        pass
+            if all_temps:
+                if temp_min is None:
+                    temp_min = min(all_temps)
+                if temp_max is None:
+                    temp_max = max(all_temps)
+
         formatted_date = f"{date_str[:4]}-{date_str[4:6]}-{date_str[6:]}"
         row_date = datetime.strptime(date_str, "%Y%m%d").date()
 

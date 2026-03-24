@@ -1,14 +1,20 @@
 /**
- * Role: 날짜 클릭 시 브리핑 카드 렌더링
- * Key Features: 날씨 상세, 일정 목록(경고 포함), 활동 추천
+ * Role: 날짜 클릭 시 바텀시트 브리핑 카드 렌더링
+ * Key Features: 날씨 상세, 일정 목록(경고 포함), 활동 추천, 오버레이
  * Dependencies: api.js
  */
 
 let currentBriefingDate = null;
 
+function closeBriefing() {
+    document.getElementById('briefing-panel').classList.add('hidden');
+    document.getElementById('briefing-overlay').classList.add('hidden');
+}
+
 async function openBriefing(dateStr) {
     currentBriefingDate = dateStr;
     const panel = document.getElementById('briefing-panel');
+    const overlay = document.getElementById('briefing-overlay');
     const content = document.getElementById('briefing-content');
 
     const dateObj = new Date(dateStr + 'T00:00:00');
@@ -73,12 +79,12 @@ async function openBriefing(dateStr) {
 
     content.innerHTML = html;
     panel.classList.remove('hidden');
+    overlay.classList.remove('hidden');
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('close-briefing').addEventListener('click', () => {
-        document.getElementById('briefing-panel').classList.add('hidden');
-    });
+    document.getElementById('close-briefing').addEventListener('click', closeBriefing);
+    document.getElementById('briefing-overlay').addEventListener('click', closeBriefing);
 
     document.getElementById('add-schedule-date-btn').addEventListener('click', () => {
         if (currentBriefingDate) {

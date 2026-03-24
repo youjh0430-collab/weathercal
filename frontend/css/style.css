@@ -1,6 +1,6 @@
 /**
  * Role: WeatherCal 전체 스타일
- * Key Features: 캘린더 그리드, 브리핑 카드, 모달, 반응형 기본
+ * Key Features: 캘린더, 다가오는 일정 카드, 오늘 날씨 대형 카드, 바텀시트, FAB
  */
 
 * {
@@ -10,29 +10,50 @@
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background: #f5f7fa;
+    font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 400;
+    background: #f2f4f8;
     color: #333;
+    padding-bottom: 40px;
 }
 
+/* === 헤더 === */
 .header {
-    background: #4a90d9;
-    color: white;
-    padding: 16px 24px;
+    background: white;
+    padding: 16px 20px;
+    border-bottom: 1px solid #eee;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.header h1 { font-size: 1.4rem; }
+.header-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #4a90d9;
+}
+
+.header-location {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.location-icon { font-size: 1.1rem; }
+
 .location-select {
-    background: rgba(255,255,255,0.2);
-    color: white;
-    border: 1px solid rgba(255,255,255,0.4);
-    border-radius: 6px;
-    padding: 4px 8px;
-    font-size: 0.9rem;
+    background: none;
+    border: none;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #333;
     cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
+    padding-right: 16px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right center;
 }
 
 .location-select option {
@@ -40,169 +61,344 @@ body {
     background: white;
 }
 
+/* === 메인 콘텐츠 === */
 .main-content {
-    display: flex;
-    max-width: 1200px;
+    max-width: 500px;
     margin: 0 auto;
-    padding: 24px;
-    gap: 24px;
+    padding: 0 16px;
 }
 
-.calendar-section { flex: 1; }
+/* === 캘린더 === */
+.calendar-section {
+    background: white;
+    border-radius: 16px;
+    padding: 20px 16px;
+    margin-top: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
 
 .calendar-nav {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    gap: 24px;
     margin-bottom: 16px;
 }
 
-.calendar-nav h2 { font-size: 1.3rem; }
+.month-label { display: flex; flex-direction: column; }
+.year-label { font-size: 0.8rem; color: #4a90d9; font-weight: 600; }
+.calendar-nav h2 { font-size: 1.5rem; font-weight: 700; }
+
+.nav-buttons { display: flex; gap: 4px; }
 
 .nav-btn {
-    background: none;
-    border: 1px solid #ddd;
+    background: #f0f2f5;
+    border: none;
     border-radius: 8px;
-    padding: 8px 16px;
+    width: 36px;
+    height: 36px;
     cursor: pointer;
-    font-size: 1rem;
+    font-size: 1.2rem;
+    color: #555;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
-.nav-btn:hover { background: #e8e8e8; }
+.nav-btn:hover { background: #e4e6ea; }
 
 .calendar-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 1px;
-    background: white;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    gap: 0;
 }
 
 .day-header {
-    background: #f0f4f8;
-    padding: 12px;
+    padding: 8px 0;
     text-align: center;
     font-weight: 600;
-    font-size: 0.85rem;
-    color: #666;
+    font-size: 0.8rem;
+    color: #888;
 }
+.day-header.sun { color: #e74c3c; }
+.day-header.sat { color: #4a90d9; }
 
 .day-cell {
-    background: white;
-    min-height: 80px;
-    padding: 6px;
+    min-height: 64px;
+    padding: 4px 2px;
     cursor: pointer;
     display: flex;
     flex-direction: column;
     align-items: stretch;
     gap: 2px;
-    border: 1px solid #f0f0f0;
+    border-radius: 10px;
     transition: background 0.15s;
 }
 
 .day-cell:hover { background: #f5f8ff; }
-.day-cell.empty { cursor: default; background: #fafafa; }
-.day-cell.empty:hover { background: #fafafa; }
+.day-cell.empty { cursor: default; }
+.day-cell.empty:hover { background: transparent; }
 
 .day-cell.today {
-    background: #e8f0fe;
-    border: 2px solid #4a90d9;
+    background: #4a90d9;
+    border-radius: 10px;
 }
+.day-cell.today .date-number { color: white; font-weight: 700; }
+.day-cell.today .weather-icon { filter: none; opacity: 1; }
 
 .day-cell.selected {
-    background: #f0f4ff;
-    border: 2px solid #a0b8e0;
+    background: #e8f0fe;
 }
-
-/* 오늘이면서 선택된 경우 — 오늘 스타일 유지 */
 .day-cell.today.selected {
-    background: #dce8fc;
-    border: 2px solid #4a90d9;
+    background: #3a7bc8;
 }
 
-/* 날짜 + 날씨 아이콘 상단 행 */
 .day-top {
     display: flex;
     align-items: center;
-    gap: 3px;
+    justify-content: center;
+    gap: 2px;
+    padding: 2px 0;
 }
 
 .date-number {
-    font-weight: 600;
+    font-weight: 500;
     font-size: 0.85rem;
+    text-align: center;
 }
 
 .weather-icon {
-    font-size: 0.95rem;
+    font-size: 0.8rem;
 }
 .weather-icon.past {
     filter: grayscale(100%);
-    opacity: 0.5;
+    opacity: 0.4;
 }
 
-/* 일정 제목 미리보기 */
 .schedule-preview {
-    font-size: 0.7rem;
+    font-size: 0.6rem;
     color: #fff;
     background: #4a90d9;
     border-radius: 3px;
-    padding: 1px 4px;
+    padding: 1px 3px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     line-height: 1.4;
 }
 
-.schedule-more {
-    font-size: 0.65rem;
-    color: #888;
-    padding-left: 2px;
+.day-cell.today .schedule-preview {
+    background: rgba(255,255,255,0.3);
 }
 
-.add-btn {
-    display: block;
-    width: 100%;
-    margin-top: 16px;
-    padding: 12px;
+.schedule-more {
+    font-size: 0.6rem;
+    color: #888;
+    text-align: center;
+}
+
+/* === 다가오는 일정 === */
+.upcoming-section {
+    margin-top: 20px;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.section-header h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.upcoming-cards {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px;
+}
+
+/* 스크롤바 숨김 */
+.upcoming-cards::-webkit-scrollbar { display: none; }
+.upcoming-cards { -ms-overflow-style: none; scrollbar-width: none; }
+
+.upcoming-card {
+    flex: 0 0 200px;
+    background: white;
+    border-radius: 14px;
+    padding: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    scroll-snap-align: start;
+    cursor: pointer;
+    transition: transform 0.15s;
+}
+.upcoming-card:hover { transform: translateY(-2px); }
+
+.upcoming-badge {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 12px;
+    background: #e8f0fe;
+    color: #4a90d9;
+}
+.upcoming-badge.today {
     background: #4a90d9;
     color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    cursor: pointer;
 }
-.add-btn:hover { background: #3a7bc8; }
+
+.upcoming-weather {
+    font-size: 0.8rem;
+    color: #888;
+    margin-top: 4px;
+    float: right;
+}
+
+.upcoming-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-top: 12px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.upcoming-time {
+    font-size: 0.8rem;
+    color: #888;
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.upcoming-empty {
+    width: 100%;
+    text-align: center;
+    color: #aaa;
+    font-size: 0.9rem;
+    padding: 24px 0;
+}
+
+/* === 오늘 날씨 대형 카드 === */
+.today-weather {
+    background: linear-gradient(135deg, #4a90d9 0%, #357abd 50%, #2c5f9e 100%);
+    border-radius: 20px;
+    padding: 24px;
+    margin-top: 20px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.today-weather-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.today-weather-label {
+    font-size: 0.85rem;
+    opacity: 0.85;
+}
+
+.today-weather-icon {
+    font-size: 3rem;
+}
+
+.today-weather-temp {
+    margin-top: 4px;
+}
+
+.today-weather-temp span:first-child {
+    font-size: 3.5rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.temp-unit {
+    font-size: 2rem;
+    font-weight: 300;
+}
+
+.today-weather-condition {
+    display: block;
+    font-size: 1.1rem;
+    margin-top: 2px;
+    opacity: 0.9;
+}
+
+.today-weather-details {
+    display: flex;
+    gap: 0;
+    margin-top: 20px;
+    border-top: 1px solid rgba(255,255,255,0.2);
+    padding-top: 16px;
+}
+
+.today-detail-item {
+    flex: 1;
+    text-align: center;
+}
+
+.today-detail-label {
+    font-size: 0.75rem;
+    opacity: 0.7;
+    display: block;
+}
+
+.today-detail-value {
+    font-size: 1.1rem;
+    font-weight: 600;
+    display: block;
+    margin-top: 4px;
+}
+
+/* === 브리핑 바텀시트 === */
+.briefing-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.3);
+    z-index: 49;
+}
+.briefing-overlay.hidden { display: none; }
 
 .briefing-panel {
-    width: 360px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
     background: white;
-    border-radius: 12px;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.1);
-    padding: 20px;
-    max-height: calc(100vh - 120px);
+    border-radius: 20px 20px 0 0;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.12);
+    padding: 8px 20px 20px;
+    max-height: 75vh;
+    z-index: 50;
     display: flex;
     flex-direction: column;
     overflow: hidden;
 }
 
-/* 브리핑 콘텐츠 — 스크롤 영역 */
-#briefing-content {
-    flex: 1;
-    overflow-y: auto;
-    min-height: 0;
-}
+.briefing-panel.hidden { display: none; }
 
-/* 하단 일정 추가 버튼 — 스크롤 밖 고정 */
-.briefing-panel > .add-btn {
+.briefing-handle {
+    width: 100%;
+    text-align: center;
+    padding: 4px 0 8px;
     flex-shrink: 0;
 }
 
-.briefing-panel.hidden { display: none; }
-
-/* 드래그 핸들 — 데스크톱에서는 숨김 */
-.briefing-handle { display: none; }
+.briefing-handle span {
+    display: inline-block;
+    width: 40px;
+    height: 4px;
+    background: #ddd;
+    border-radius: 2px;
+}
 
 .briefing-header {
     display: flex;
@@ -214,9 +410,20 @@ body {
 
 .briefing-header h3 { font-size: 1.1rem; }
 
+#briefing-content {
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+}
+
+.briefing-add-btn {
+    flex-shrink: 0;
+}
+
+/* === 카드 공통 === */
 .card {
     background: #f8f9fa;
-    border-radius: 10px;
+    border-radius: 12px;
     padding: 14px;
     margin-bottom: 12px;
 }
@@ -244,6 +451,7 @@ body {
     align-items: center;
     gap: 8px;
     margin-bottom: 8px;
+    flex-wrap: wrap;
 }
 
 .schedule-time { font-weight: 600; }
@@ -294,10 +502,25 @@ body {
 }
 .recommend-list li:last-child { border: none; }
 
+/* === 버튼 === */
+.add-btn {
+    display: block;
+    width: 100%;
+    margin-top: 12px;
+    padding: 12px;
+    background: #4a90d9;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    cursor: pointer;
+}
+.add-btn:hover { background: #3a7bc8; }
+
 .btn-small {
-    padding: 4px 12px;
+    padding: 6px 14px;
     border: 1px solid #ddd;
-    border-radius: 6px;
+    border-radius: 8px;
     background: white;
     cursor: pointer;
     font-size: 0.8rem;
@@ -312,9 +535,36 @@ body {
     font-size: 1.2rem;
     cursor: pointer;
     color: #999;
+    padding: 4px 8px;
 }
 .close-btn:hover { color: #333; }
 
+/* === FAB 버튼 === */
+.fab-btn {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    background: #4a90d9;
+    color: white;
+    border: none;
+    font-size: 1.8rem;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(74,144,217,0.4);
+    z-index: 40;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.15s, box-shadow 0.15s;
+}
+.fab-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(74,144,217,0.5);
+}
+
+/* === 모달 === */
 .modal {
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
@@ -329,10 +579,12 @@ body {
 
 .modal-content {
     background: white;
-    border-radius: 12px;
+    border-radius: 16px;
     padding: 24px;
     width: 400px;
     max-width: 90vw;
+    max-height: 90vh;
+    overflow-y: auto;
 }
 
 .modal-header {
@@ -358,9 +610,9 @@ body {
 .form-group input[type="time"],
 .form-group textarea {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     border: 1px solid #ddd;
-    border-radius: 8px;
+    border-radius: 10px;
     font-size: 0.95rem;
 }
 
@@ -389,8 +641,8 @@ body {
     background: #4a90d9;
     color: white;
     border: none;
-    padding: 10px 24px;
-    border-radius: 8px;
+    padding: 12px 24px;
+    border-radius: 10px;
     cursor: pointer;
     font-size: 0.95rem;
 }
@@ -400,150 +652,115 @@ body {
     background: white;
     color: #666;
     border: 1px solid #ddd;
-    padding: 10px 24px;
-    border-radius: 8px;
+    padding: 12px 24px;
+    border-radius: 10px;
     cursor: pointer;
     font-size: 0.95rem;
 }
 .btn-secondary:hover { background: #f5f5f5; }
 
-/* === 모바일 최적화 (768px 이하) === */
-@media (max-width: 768px) {
+/* === 데스크톱 (769px 이상) === */
+@media (min-width: 769px) {
     .header {
-        padding: 12px 16px;
+        padding: 16px 40px;
     }
 
-    .header h1 { font-size: 1.2rem; }
-
-    /* 메인 레이아웃: 가로 → 세로 전환 */
     .main-content {
-        flex-direction: column;
-        padding: 12px;
-        gap: 0;
+        max-width: 1100px;
+        display: flex;
+        gap: 24px;
+        padding: 24px 40px;
     }
 
-    /* 캘린더 네비게이션 */
-    .calendar-nav {
-        gap: 16px;
-        margin-bottom: 12px;
-    }
-
-    .calendar-nav h2 { font-size: 1.1rem; }
-
-    .nav-btn {
-        padding: 6px 12px;
-        font-size: 0.9rem;
-    }
-
-    /* 캘린더 셀 — 모바일에서 작게 */
-    .day-header {
-        padding: 8px 4px;
-        font-size: 0.75rem;
+    /* 좌측: 캘린더 */
+    .calendar-section {
+        flex: 1;
+        min-width: 0;
+        margin-top: 0;
     }
 
     .day-cell {
-        min-height: 56px;
-        padding: 4px 2px;
-        gap: 2px;
+        min-height: 90px;
+        padding: 6px 4px;
     }
 
-    .date-number { font-size: 0.75rem; }
-    .weather-icon { font-size: 0.85rem; }
-    .schedule-preview { font-size: 0.6rem; }
+    .date-number { font-size: 0.9rem; }
+    .weather-icon { font-size: 0.95rem; }
+    .schedule-preview { font-size: 0.7rem; padding: 2px 4px; }
 
-    /* 브리핑 패널 — 모바일에서 하단 슬라이드 오버레이 */
-    .briefing-panel {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        width: 100%;
-        max-height: 70vh;
-        border-radius: 16px 16px 0 0;
-        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
-        z-index: 50;
-        padding: 16px;
+    /* 우측: 사이드 패널 */
+    .side-panel {
+        width: 360px;
+        flex-shrink: 0;
         display: flex;
         flex-direction: column;
-        overflow: hidden;
+        gap: 16px;
     }
 
-    /* 브리핑 패널 상단 드래그 핸들 — 패널 최상단 중앙 정렬 */
-    .briefing-handle {
+    .upcoming-section {
+        margin-top: 0;
+    }
+
+    /* 다가오는 일정 — PC에서는 세로 배치 */
+    .upcoming-cards {
+        flex-direction: column;
+        overflow-x: visible;
+    }
+
+    .upcoming-card {
+        flex: none;
         width: 100%;
-        text-align: center;
-        padding: 4px 0 8px;
     }
 
-    .briefing-handle span {
-        display: inline-block;
-        width: 40px;
-        height: 4px;
-        background: #ccc;
-        border-radius: 2px;
+    .today-weather {
+        margin-top: 0;
     }
 
-    /* 일정 추가 버튼 */
-    .add-btn {
-        padding: 10px;
-        font-size: 0.9rem;
-        margin-top: 12px;
+    /* 브리핑 — PC에서는 사이드 인라인 패널 */
+    .briefing-overlay {
+        display: none !important;
     }
 
-    /* 모달 — 모바일 전체 너비 */
-    .modal-content {
-        width: 95vw;
-        padding: 20px 16px;
-        max-height: 90vh;
-        overflow-y: auto;
+    .briefing-panel {
+        position: static;
+        max-height: none;
+        border-radius: 16px;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+        padding: 20px;
     }
 
-    /* 카드 내부 여백 축소 */
-    .card { padding: 12px; }
-    .card-icon { font-size: 1.6rem; }
-    .weather-main { font-size: 1rem; }
-
-    .schedule-header {
-        flex-wrap: wrap;
-        gap: 4px;
+    .briefing-handle {
+        display: none;
     }
 
-    /* 버튼 터치 영역 확대 — 최소 44px */
-    .btn-small {
-        padding: 8px 14px;
-        font-size: 0.85rem;
+    /* FAB 위치 */
+    .fab-btn {
+        bottom: 32px;
+        right: 40px;
+    }
+}
+
+/* === 모바일 (768px 이하) === */
+@media (max-width: 768px) {
+    /* 사이드 패널 래퍼 해제 — 모바일에서는 세로 나열 */
+    .side-panel {
+        display: contents;
     }
 
-    .close-btn {
-        font-size: 1.4rem;
-        padding: 4px 8px;
-    }
-
-    .form-group input[type="text"],
-    .form-group input[type="date"],
-    .form-group input[type="time"],
-    .form-group textarea {
-        padding: 12px;
-        font-size: 1rem;
-    }
-
-    .btn-primary,
-    .btn-secondary {
-        padding: 12px 20px;
-        font-size: 1rem;
-    }
+    /* 브리핑 — 모바일에서는 바텀시트 (fixed position은 기본 스타일에 이미 적용) */
 }
 
 /* === 초소형 모바일 (375px 이하) === */
 @media (max-width: 375px) {
     .day-cell {
-        min-height: 48px;
-        padding: 3px 1px;
+        min-height: 52px;
     }
 
-    .date-number { font-size: 0.65rem; }
-    .weather-icon { font-size: 0.75rem; }
+    .date-number { font-size: 0.75rem; }
+    .weather-icon { font-size: 0.7rem; }
     .schedule-preview { font-size: 0.55rem; }
 
-    .calendar-nav h2 { font-size: 1rem; }
+    .upcoming-card { flex: 0 0 170px; padding: 12px; }
+
+    .today-weather-temp span:first-child { font-size: 2.8rem; }
 }
