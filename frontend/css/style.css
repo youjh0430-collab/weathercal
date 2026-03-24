@@ -33,10 +33,29 @@ body {
     color: #4a90d9;
 }
 
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
 .header-location {
     display: flex;
     align-items: center;
     gap: 6px;
+}
+
+.logout-btn {
+    font-size: 0.8rem;
+    color: #888;
+    text-decoration: none;
+    padding: 4px 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+}
+.logout-btn:hover {
+    color: #333;
+    border-color: #bbb;
 }
 
 .location-icon { font-size: 1.1rem; }

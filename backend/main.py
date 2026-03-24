@@ -10,7 +10,7 @@ from contextlib import asynccontextmanager
 import os
 
 from database import init_db
-from routers import schedules, weather, briefing
+from routers import auth, schedules, weather, briefing
 
 
 @asynccontextmanager
@@ -29,6 +29,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.include_router(auth.router)
 app.include_router(schedules.router)
 app.include_router(weather.router)
 app.include_router(briefing.router)

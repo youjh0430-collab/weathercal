@@ -1,6 +1,6 @@
 """
 Role: SQLite DB 연결 및 테이블 생성
-Key Features: schedules, weather_cache, activities 테이블 관리
+Key Features: users, schedules, weather_cache, activities 테이블 관리
 Dependencies: sqlite3 (Python 내장)
 """
 import sqlite3
@@ -14,6 +14,7 @@ def get_connection():
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA journal_mode=WAL")
+    conn.execute("PRAGMA foreign_keys=ON")
     return conn
 
 
@@ -23,14 +24,28 @@ def init_db():
     cursor = conn.cursor()
 
     cursor.execute("""
+        CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            provider TEXT NOT NULL,
+            provider_id TEXT NOT NULL,
+            name TEXT NOT NULL,
+            profile_image TEXT,
+            created_at TEXT DEFAULT (datetime('now', 'localtime')),
+            UNIQUE (provider, provider_id)
+        )
+    """)
+
+    cursor.execute("""
         CREATE TABLE IF NOT EXISTS schedules (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER,
             title TEXT NOT NULL,
             date TEXT NOT NULL,
             time TEXT,
             category TEXT DEFAULT 'indoor',
             memo TEXT,
-            created_at TEXT DEFAULT (datetime('now', 'localtime'))
+            created_at TEXT DEFAULT (datetime('now', 'localtime')),
+            FOREIGN KEY (user_id) REFERENCES users(id)
         )
     """)
 
@@ -60,6 +75,11 @@ def init_db():
             is_active INTEGER DEFAULT 1
         )
     """)
+
+    # 기존 schedules 테이블에 user_id 컬럼이 없으면 추가
+    columns = [row[1] for row in cursor.execute("PRAGMA table_info(schedules)").fetchall()]
+    if "user_id" not in columns:
+        cursor.execute("ALTER TABLE schedules ADD COLUMN user_id INTEGER")
 
     conn.commit()
     conn.close()

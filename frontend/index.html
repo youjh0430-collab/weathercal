@@ -15,9 +15,10 @@
 <body>
     <header class="header">
         <h1 class="header-title">WeatherCal</h1>
-        <div class="header-location">
-            <span class="location-icon">📍</span>
-            <select id="station-select" class="location-select">
+        <div class="header-right">
+            <div class="header-location">
+                <span class="location-icon">📍</span>
+                <select id="station-select" class="location-select">
                 <option value="서울" selected>서울</option>
                 <option value="부산">부산</option>
                 <option value="대구">대구</option>
@@ -35,6 +36,8 @@
                 <option value="창원">창원</option>
                 <option value="강릉">강릉</option>
             </select>
+            </div>
+            <a href="/api/auth/logout" id="logout-btn" class="logout-btn" style="display:none">로그아웃</a>
         </div>
     </header>
 
@@ -150,6 +153,16 @@
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('/sw.js');
         }
+
+        // 로그인 상태 확인 — 미로그인 시 로그인 페이지로 이동
+        fetch('/api/auth/me').then(r => r.json()).then(data => {
+            if (!data.logged_in) {
+                window.location.href = '/login.html';
+            } else {
+                document.getElementById('logout-btn').style.display = 'inline';
+                document.title = `WeatherCal — ${data.name}`;
+            }
+        });
     </script>
     <script src="/js/api.js"></script>
     <script src="/js/calendar.js"></script>
