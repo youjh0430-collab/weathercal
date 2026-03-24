@@ -27,7 +27,10 @@ def get_briefing(date: str, request: Request, station: str = "서울"):
             (user["id"], date)
         ).fetchall()
     else:
-        rows = []
+        rows = conn.execute(
+            "SELECT * FROM schedules WHERE user_id IS NULL AND date = ? ORDER BY time",
+            (date,)
+        ).fetchall()
 
     conn.close()
 
