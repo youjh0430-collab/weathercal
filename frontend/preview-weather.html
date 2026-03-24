@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>날씨 테마 미리보기</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        body {
+            background: #f2f4f8;
+            padding: 24px;
+            font-family: 'Pretendard Variable', sans-serif;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 8px;
+            font-size: 1.5rem;
+            color: #333;
+        }
+        .subtitle {
+            text-align: center;
+            color: #888;
+            margin-bottom: 32px;
+            font-size: 0.9rem;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .theme-label {
+            text-align: center;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #555;
+            font-size: 0.95rem;
+        }
+    </style>
+</head>
+<body>
+    <h1>WeatherCal 날씨 테마 미리보기</h1>
+    <p class="subtitle">아이폰 날씨앱 스타일 — 오늘 날씨 카드 6종</p>
+
+    <div class="grid">
+        <!-- 맑음 -->
+        <div>
+            <div class="theme-label">☀️ 맑음 (Sunny)</div>
+            <section class="today-weather theme-sunny">
+                <div class="today-weather-top">
+                    <span class="today-weather-label">오늘 날씨</span>
+                    <span class="today-weather-icon">☀️</span>
+                </div>
+                <div class="today-weather-temp">
+                    <span>12°<span class="temp-separator"> / </span>22</span><span class="temp-unit">°</span>
+                    <span class="today-weather-condition">맑음</span>
+                </div>
+                <div class="today-weather-details">
+                    <div class="today-detail-item">
+                        <span class="today-detail-label">습도</span>
+                        <span class="today-detail-value">45%</span>
+                    </div>
+                    <div class="today-detail-item">
+                        <span class="today-detail-label">풍속</span>
+                        <span class="today-detail-value">2.3m/s</span>
+                    </div>
+                    <div class="today-detail-item">
+                        <span class="today-detail-label">일교차</span>
+                        <span class="today-detail-value">10°</span>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- 구름많음 -->
+        <div>
+            <div class="theme-label">⛅ 구름많음 (Partly Cloudy)</div>
+            <section class="today-weather theme-partly-cloudy">
+                <div class="today-weather-top">
+                    <span class="today-weather-label">오늘 날씨</span>
+                    <span class="today-weather-icon">⛅</span>
+                </div>
+                <div class="today-weather-temp">
+                    <span>14°<span class="temp-separator"> / </span>20</span><span class="temp-unit">°</span>
+                    <span class="today-weather-condition">구름많음</span>
+                </div>
+                <div class="today-weather-details">
+                    <div class="today-detail-item">
+                        <span class="today-detail-label">습도</span>
+                        <span class="today-detail-value">55%</span>
+                    </div>
+                    <div class="today-detail-item">
+                        <span class="today-detail-label">풍속</span>
+                        <span class="today-detail-value">3.1m/s</span>
+                    </div>
+                    <div class="today-detail-item">
+                        <span class="today-detail-label">일교차</span>
+                        <span class="today-detail-value">6°</span>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- 흐림 -->
+        <div>
+            <div class="theme-label">☁️ 흐림 (Cloudy)</div>
+            <section class="today-weather theme-cloudy">
+                <div class="today-weather-top">
+                    <span class="today-weather-label">오늘 날씨</span>
+                    <span class="today-weather-icon">☁️</span>
+                </div>
+                <div class="today-weather-temp">
+                    <span>10°<span class="temp-separator"> / </span>15</span><span class="temp-unit">°</span>
+                    <span class="today-weather-condition">흐림</span>
+                </div>
+                <div class="today-weather-details">
+                    <div class="today-detail-item">
+                        <span class="today-detail-label">습도</span>
+                        <span class="today-detail-value">70%</span>
+                    </div>
+                    <div class="today-detail-item">
+                        <span class="today-detail-label">풍속</span>
+                        <span class="today-detail-value">4.0m/s</span>
+                    </div>
+                    <div class="today-detail-item">
+                        <span class="today-detail-label">일교차</span>
+                        <span class="today-detail-value">5°</span>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- 비 -->
+        <div>
+            <div class="theme-label">🌧 비 (Rain)</div>
+            <section class="today-weather theme-rain">
+                <div class="today-weather-top">
+                    <span class="today-weather-label">오늘 날씨</span>
+                    <span class="today-weather-icon">🌧</span>
+                </div>
+                <div class="today-weather-temp">
+                    <span>8°<span class="temp-separator"> / </span>13</span><span class="temp-unit">°</span>
+                    <span class="today-weather-condition">비</span>
+                </div>
+                <div class="today-weather-details">
+                    <div class="today-detail-item">
+                        <span class="today-detail-label">습도</span>
+                        <span class="today-detail-value">85%</span>
+                    </div>
+                    <div class="today-detail-item">
+                        <span class="today-detail-label">풍속</span>
+                        <span class="today-detail-value">5.2m/s</span>
+                    </div>
+                    <div class="today-detail-item">
+                        <span class="today-detail-label">일교차</span>
+                        <span class="today-detail-value">5°</span>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- 눈 -->
+        <div>
+            <div class="theme-label">🌨 눈 (Snow)</div>
+            <section class="today-weather theme-snow">
+                <div class="today-weather-top">
+                    <span class="today-weather-label">오늘 날씨</span>
+                    <span class="today-weather-icon">🌨</span>
+                </div>
+                <div class="today-weather-temp">
+                    <span>-3°<span class="temp-separator"> / </span>2</span><span class="temp-unit">°</span>
+                    <span class="today-weather-condition">눈</span>
+                </div>
+                <div class="today-weather-details">
+                    <div class="today-detail-item">
+                        <span class="today-detail-label">습도</span>
+                        <span class="today-detail-value">80%</span>
+                    </div>
+                    <div class="today-detail-item">
+                        <span class="today-detail-label">풍속</span>
+                        <span class="today-detail-value">6.1m/s</span>
+                    </div>
+                    <div class="today-detail-item">
+                        <span class="today-detail-label">일교차</span>
+                        <span class="today-detail-value">5°</span>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- 진눈깨비 -->
+        <div>
+            <div class="theme-label">🌧 진눈깨비 (Sleet)</div>
+            <section class="today-weather theme-sleet">
+                <div class="today-weather-top">
+                    <span class="today-weather-label">오늘 날씨</span>
+                    <span class="today-weather-icon">🌧</span>
+                </div>
+                <div class="today-weather-temp">
+                    <span>0°<span class="temp-separator"> / </span>4</span><span class="temp-unit">°</span>
+                    <span class="today-weather-condition">진눈깨비</span>
+                </div>
+                <div class="today-weather-details">
+                    <div class="today-detail-item">
+                        <span class="today-detail-label">습도</span>
+                        <span class="today-detail-value">78%</span>
+                    </div>
+                    <div class="today-detail-item">
+                        <span class="today-detail-label">풍속</span>
+                        <span class="today-detail-value">7.0m/s</span>
+                    </div>
+                    <div class="today-detail-item">
+                        <span class="today-detail-label">일교차</span>
+                        <span class="today-detail-value">4°</span>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</body>
+</html>

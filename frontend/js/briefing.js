@@ -4,6 +4,19 @@
  * Dependencies: api.js
  */
 
+// 날씨 상태별 그라데이션 — 브리핑 날씨 카드 배경에 적용
+const WEATHER_GRADIENTS = {
+    'sunny':        'linear-gradient(135deg, #f6d365 0%, #fda085 100%)',
+    'partly_cloudy':'linear-gradient(135deg, #89b4e0 0%, #c4b5d0 100%)',
+    'cloudy':       'linear-gradient(135deg, #9eaab7 0%, #bec8d1 100%)',
+    'rain':         'linear-gradient(135deg, #2c3e50 0%, #4ca1af 100%)',
+    'snow':         'linear-gradient(135deg, #e6e9f0 0%, #c3cfe2 100%)',
+    'sleet':        'linear-gradient(135deg, #536976 0%, #7d96a1 100%)',
+};
+
+// 눈·흐림 등 밝은 배경에서 텍스트 가독성 확보
+const WEATHER_DARK_TEXT = ['snow', 'cloudy'];
+
 let currentBriefingDate = null;
 
 function closeBriefing() {
@@ -29,8 +42,10 @@ async function openBriefing(dateStr) {
     if (briefing.weather) {
         const w = briefing.weather;
         const icon = WEATHER_ICONS[w.icon] || '🌡';
+        const gradient = WEATHER_GRADIENTS[w.icon] || 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+        const textColor = WEATHER_DARK_TEXT.includes(w.icon) ? '#333' : '#fff';
         html += `
-            <div class="card weather-card">
+            <div class="card weather-card" style="background: ${gradient}; color: ${textColor};">
                 <div class="card-icon">${icon}</div>
                 <div class="card-body">
                     <div class="weather-main">${w.condition} ${w.temp_min != null && w.temp_max != null ? `${w.temp_min}° / ${w.temp_max}°` : `${w.temperature}°C`}</div>

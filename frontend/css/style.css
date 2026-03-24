@@ -303,15 +303,202 @@ body {
     padding: 24px 0;
 }
 
-/* === 오늘 날씨 대형 카드 === */
+/* === 오늘 날씨 대형 카드 — 아이폰 날씨앱 스타일 === */
 .today-weather {
-    background: linear-gradient(135deg, #4a90d9 0%, #357abd 50%, #2c5f9e 100%);
     border-radius: 20px;
     padding: 24px;
     margin-top: 20px;
     color: white;
     position: relative;
     overflow: hidden;
+    /* 기본값 — 테마 클래스가 없을 때 */
+    background: linear-gradient(170deg, #4a90d9 0%, #357abd 50%, #2c5f9e 100%);
+}
+
+/* 공통 장식 레이어 */
+.today-weather::before,
+.today-weather::after {
+    content: '';
+    position: absolute;
+    pointer-events: none;
+}
+
+/* ── 맑음: 맑은 하늘 + 빛나는 태양 ── */
+.today-weather.theme-sunny {
+    background:
+        radial-gradient(circle at 85% 15%, rgba(255,230,100,0.7) 0%, rgba(255,200,50,0.3) 25%, transparent 50%),
+        radial-gradient(circle at 85% 15%, rgba(255,255,200,0.4) 0%, transparent 35%),
+        linear-gradient(170deg, #1a8fe3 0%, #47a8f5 35%, #87ceeb 70%, #b4d7f0 100%);
+}
+.today-weather.theme-sunny::before {
+    width: 120px; height: 120px;
+    top: -20px; right: 10px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,240,150,0.9) 0%, rgba(255,200,50,0.4) 40%, transparent 70%);
+    box-shadow: 0 0 60px 20px rgba(255,220,100,0.3);
+}
+.today-weather.theme-sunny::after {
+    width: 100%; height: 100%;
+    top: 0; left: 0;
+    background:
+        radial-gradient(circle at 20% 80%, rgba(255,255,255,0.05) 0%, transparent 30%),
+        radial-gradient(circle at 60% 90%, rgba(255,255,255,0.03) 0%, transparent 25%);
+}
+
+/* ── 구름많음: 파란 하늘 + 큰 구름 ── */
+.today-weather.theme-partly-cloudy {
+    background:
+        radial-gradient(ellipse at 65% 55%, rgba(255,255,255,0.25) 0%, transparent 35%),
+        radial-gradient(ellipse at 45% 50%, rgba(255,255,255,0.2) 0%, transparent 30%),
+        radial-gradient(circle at 90% 20%, rgba(255,220,130,0.15) 0%, transparent 35%),
+        linear-gradient(170deg, #5a9fd4 0%, #7db8e0 30%, #a0c8e8 60%, #c5d9ea 100%);
+}
+.today-weather.theme-partly-cloudy::before {
+    width: 180px; height: 80px;
+    top: 15px; right: -20px;
+    border-radius: 40px;
+    background: rgba(255,255,255,0.25);
+    box-shadow:
+        -50px 15px 0 10px rgba(255,255,255,0.2),
+        -20px -10px 0 20px rgba(255,255,255,0.15);
+}
+.today-weather.theme-partly-cloudy::after {
+    width: 140px; height: 60px;
+    bottom: 20px; left: -20px;
+    border-radius: 30px;
+    background: rgba(255,255,255,0.12);
+    box-shadow: 40px -8px 0 15px rgba(255,255,255,0.1);
+}
+
+/* ── 흐림: 두꺼운 구름층 ── */
+.today-weather.theme-cloudy {
+    background:
+        radial-gradient(ellipse at 50% 40%, rgba(255,255,255,0.12) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 60%, rgba(255,255,255,0.08) 0%, transparent 40%),
+        linear-gradient(170deg, #7a8a96 0%, #95a5b0 30%, #a8b5be 60%, #bcc5cc 100%);
+}
+.today-weather.theme-cloudy::before {
+    width: 220px; height: 90px;
+    top: -10px; right: -30px;
+    border-radius: 50px;
+    background: rgba(255,255,255,0.18);
+    box-shadow:
+        -60px 20px 0 15px rgba(255,255,255,0.15),
+        -100px 5px 0 25px rgba(255,255,255,0.1);
+}
+.today-weather.theme-cloudy::after {
+    width: 200px; height: 80px;
+    bottom: -15px; left: -30px;
+    border-radius: 45px;
+    background: rgba(255,255,255,0.12);
+    box-shadow:
+        50px -10px 0 20px rgba(255,255,255,0.1),
+        120px 5px 0 10px rgba(255,255,255,0.08);
+}
+
+/* ── 비: 어두운 하늘 + 빗줄기 패턴 ── */
+.today-weather.theme-rain {
+    background:
+        repeating-linear-gradient(
+            105deg,
+            transparent,
+            transparent 8px,
+            rgba(180,210,240,0.06) 8px,
+            rgba(180,210,240,0.06) 9px
+        ),
+        radial-gradient(ellipse at 40% 20%, rgba(100,160,220,0.15) 0%, transparent 50%),
+        linear-gradient(170deg, #1a2d42 0%, #2a4a6b 30%, #3a6080 60%, #4a7595 100%);
+}
+.today-weather.theme-rain::before {
+    width: 200px; height: 80px;
+    top: -15px; right: -20px;
+    border-radius: 45px;
+    background: rgba(60,90,120,0.4);
+    box-shadow:
+        -70px 10px 0 20px rgba(60,90,120,0.35),
+        -30px -5px 0 15px rgba(60,90,120,0.3);
+}
+.today-weather.theme-rain::after {
+    width: 100%; height: 100%;
+    top: 0; left: 0;
+    background:
+        repeating-linear-gradient(
+            100deg,
+            transparent,
+            transparent 12px,
+            rgba(200,220,240,0.04) 12px,
+            rgba(200,220,240,0.04) 13px
+        );
+}
+
+/* ── 눈: 밝은 겨울 하늘 + 눈송이 ── */
+.today-weather.theme-snow {
+    color: #2c3e50;
+    background:
+        radial-gradient(circle 2px at 15% 25%, rgba(255,255,255,0.8) 0%, transparent 100%),
+        radial-gradient(circle 2px at 35% 55%, rgba(255,255,255,0.7) 0%, transparent 100%),
+        radial-gradient(circle 3px at 55% 15%, rgba(255,255,255,0.9) 0%, transparent 100%),
+        radial-gradient(circle 2px at 75% 45%, rgba(255,255,255,0.6) 0%, transparent 100%),
+        radial-gradient(circle 2px at 90% 70%, rgba(255,255,255,0.7) 0%, transparent 100%),
+        radial-gradient(circle 2px at 25% 80%, rgba(255,255,255,0.5) 0%, transparent 100%),
+        radial-gradient(circle 3px at 65% 75%, rgba(255,255,255,0.8) 0%, transparent 100%),
+        linear-gradient(170deg, #8faabb 0%, #b0c7d6 30%, #cddae5 60%, #e2eaf0 100%);
+}
+.today-weather.theme-snow .today-weather-label,
+.today-weather.theme-snow .today-detail-label { opacity: 0.7; }
+.today-weather.theme-snow .today-weather-details { border-top-color: rgba(0,0,0,0.1); }
+.today-weather.theme-snow::before {
+    width: 200px; height: 80px;
+    top: -10px; right: -20px;
+    border-radius: 45px;
+    background: rgba(255,255,255,0.4);
+    box-shadow:
+        -60px 15px 0 15px rgba(255,255,255,0.35),
+        -20px -8px 0 25px rgba(255,255,255,0.25);
+}
+.today-weather.theme-snow::after {
+    width: 160px; height: 65px;
+    bottom: -10px; left: -15px;
+    border-radius: 35px;
+    background: rgba(255,255,255,0.25);
+    box-shadow: 50px -5px 0 15px rgba(255,255,255,0.2);
+}
+
+/* ── 진눈깨비: 어둡고 습한 분위기 ── */
+.today-weather.theme-sleet {
+    background:
+        repeating-linear-gradient(
+            108deg,
+            transparent,
+            transparent 10px,
+            rgba(200,220,240,0.04) 10px,
+            rgba(200,220,240,0.04) 11px
+        ),
+        radial-gradient(circle 2px at 30% 40%, rgba(255,255,255,0.4) 0%, transparent 100%),
+        radial-gradient(circle 2px at 70% 60%, rgba(255,255,255,0.3) 0%, transparent 100%),
+        radial-gradient(circle 2px at 50% 20%, rgba(255,255,255,0.35) 0%, transparent 100%),
+        linear-gradient(170deg, #2d4a5e 0%, #486d82 30%, #5f8599 60%, #7a9dad 100%);
+}
+.today-weather.theme-sleet::before {
+    width: 180px; height: 75px;
+    top: -10px; right: -15px;
+    border-radius: 40px;
+    background: rgba(80,110,140,0.35);
+    box-shadow:
+        -50px 12px 0 15px rgba(80,110,140,0.3),
+        -100px 0 0 20px rgba(80,110,140,0.2);
+}
+.today-weather.theme-sleet::after {
+    width: 100%; height: 100%;
+    top: 0; left: 0;
+    background:
+        repeating-linear-gradient(
+            102deg,
+            transparent,
+            transparent 14px,
+            rgba(180,210,230,0.03) 14px,
+            rgba(180,210,230,0.03) 15px
+        );
 }
 
 .today-weather-top {

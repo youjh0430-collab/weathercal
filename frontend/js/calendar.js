@@ -13,6 +13,16 @@ const WEATHER_ICONS = {
     'sleet': '🌧',
 };
 
+// 오늘 날씨 카드용 — 아이폰 날씨앱 스타일 테마 클래스
+const TODAY_WEATHER_THEMES = {
+    'sunny':        'theme-sunny',
+    'partly_cloudy': 'theme-partly-cloudy',
+    'cloudy':       'theme-cloudy',
+    'rain':         'theme-rain',
+    'snow':         'theme-snow',
+    'sleet':        'theme-sleet',
+};
+
 let currentYear, currentMonth;
 let weatherData = {};
 let scheduleData = {};
@@ -221,6 +231,11 @@ function renderTodayWeather() {
         return;
     }
     card.style.display = 'block';
+
+    // 날씨 테마 적용 — CSS 클래스 기반 (아이폰 날씨앱 스타일)
+    const themeClass = TODAY_WEATHER_THEMES[w.icon] || 'theme-sunny';
+    card.className = card.className.replace(/\btheme-\S+/g, '').trim();
+    card.classList.add(themeClass);
 
     const icon = WEATHER_ICONS[w.icon] || '🌡';
     document.getElementById('today-weather-icon').textContent = icon;
