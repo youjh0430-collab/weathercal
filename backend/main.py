@@ -22,6 +22,23 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="WeatherCal", lifespan=lifespan)
 
+from fastapi import Request
+from fastapi.responses import JSONResponse
+import traceback
+
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    print(f"Unhandled Exception: {exc}")
+    print(traceback.format_exc())
+    return JSONResponse(
+        status_code=500,
+        content={
+            "error": "Internal Server Error",
+            "detail": str(exc),
+            "traceback": traceback.format_exc()
+        }
+    )
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
