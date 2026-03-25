@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About — WeatherCal</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/about.css">
+</head>
+<body>
+    <header class="header">
+        <a href="/" class="header-title" style="text-decoration:none;color:#4a90d9">WeatherCal</a>
+    </header>
+
+    <main class="about-container">
+
+        <!-- 히어로 -->
+        <section class="about-hero">
+            <h1>WeatherCal</h1>
+            <p class="about-tagline">날씨를 입힌 캘린더, 하루를 더 똑똑하게</p>
+        </section>
+
+        <!-- 서비스 개요 -->
+        <section class="about-section">
+            <h2>서비스 개요</h2>
+            <div class="about-card">
+                <p>WeatherCal은 <strong>월간 캘린더에 날씨를 입혀</strong>, 기존 일정에는 날씨 경고를, 빈 날에는 활동 추천을 해주는 서비스입니다.</p>
+                <div class="about-concept-list">
+                    <div class="concept-item">
+                        <span class="concept-icon">🌦</span>
+                        <div>
+                            <strong>날씨는 메인이 아닌 가중치</strong>
+                            <p>날씨가 주인공이 아니라, 내 일정을 더 잘 판단하게 돕는 보조 역할</p>
+                        </div>
+                    </div>
+                    <div class="concept-item">
+                        <span class="concept-icon">⚠️</span>
+                        <div>
+                            <strong>야외 일정 날씨 경고</strong>
+                            <p>비 예보, 한파, 폭염 등 야외 일정에 영향을 주는 날씨를 미리 알려줌</p>
+                        </div>
+                    </div>
+                    <div class="concept-item">
+                        <span class="concept-icon">💡</span>
+                        <div>
+                            <strong>빈 날 활동 추천</strong>
+                            <p>일정이 없는 날, 날씨와 기온에 맞는 활동을 제안 (한국인 맞춤)</p>
+                        </div>
+                    </div>
+                    <div class="concept-item">
+                        <span class="concept-icon">👤</span>
+                        <div>
+                            <strong>게스트 모드 지원</strong>
+                            <p>로그인 없이 바로 사용 가능. 로그인하면 사용자별 일정 분리</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 기술 스택 -->
+        <section class="about-section">
+            <h2>기술 스택</h2>
+            <div class="about-card">
+                <div class="tech-grid">
+                    <div class="tech-item">
+                        <div class="tech-label">서버</div>
+                        <div class="tech-value">Python + FastAPI</div>
+                        <div class="tech-desc">직관적 문법, API 문서 자동 생성</div>
+                    </div>
+                    <div class="tech-item">
+                        <div class="tech-label">데이터베이스</div>
+                        <div class="tech-value">SQLite</div>
+                        <div class="tech-desc">설치 없이 Python 내장, 학습에 적합</div>
+                    </div>
+                    <div class="tech-item">
+                        <div class="tech-label">날씨 API</div>
+                        <div class="tech-value">기상청 API (ASOS + 단기 + 중기)</div>
+                        <div class="tech-desc">과거/현재/미래 날씨를 3개 API로 통합 조회</div>
+                    </div>
+                    <div class="tech-item">
+                        <div class="tech-label">프론트엔드</div>
+                        <div class="tech-value">HTML + CSS + JavaScript (바닐라)</div>
+                        <div class="tech-desc">프레임워크 없이 가볍게 구현</div>
+                    </div>
+                    <div class="tech-item">
+                        <div class="tech-label">인증</div>
+                        <div class="tech-value">Google / 카카오 OAuth 2.0</div>
+                        <div class="tech-desc">소셜 로그인 + 세션 쿠키 기반</div>
+                    </div>
+                    <div class="tech-item">
+                        <div class="tech-label">배포</div>
+                        <div class="tech-value">Render (Web Service)</div>
+                        <div class="tech-desc">GitHub 연동 자동 배포</div>
+                    </div>
+                    <div class="tech-item">
+                        <div class="tech-label">PWA</div>
+                        <div class="tech-value">Service Worker + Manifest</div>
+                        <div class="tech-desc">홈 화면 설치, 앱처럼 사용 가능</div>
+                    </div>
+                    <div class="tech-item">
+                        <div class="tech-label">지역 지원</div>
+                        <div class="tech-value">전국 16개 도시</div>
+                        <div class="tech-desc">도시별 기상청 관측소/격자 코드 매핑</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 데이터 구조 -->
+        <section class="about-section">
+            <h2>데이터 구조</h2>
+            <div class="about-card">
+                <div class="db-schema">
+                    <div class="db-table">
+                        <div class="db-table-name">users</div>
+                        <div class="db-table-desc">로그인 사용자 (Google/카카오)</div>
+                    </div>
+                    <div class="db-arrow">↕</div>
+                    <div class="db-table">
+                        <div class="db-table-name">schedules</div>
+                        <div class="db-table-desc">일정 (user_id로 사용자별 분리)</div>
+                    </div>
+                    <div class="db-table" style="margin-top:12px">
+                        <div class="db-table-name">weather_cache</div>
+                        <div class="db-table-desc">날씨 캐시 (날짜 × 지역별 저장)</div>
+                    </div>
+                    <div class="db-table">
+                        <div class="db-table-name">activities</div>
+                        <div class="db-table-desc">활동 추천 목록 (날씨 조건별 매칭)</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 개발 순서 -->
+        <section class="about-section">
+            <h2>개발 순서</h2>
+            <div class="about-card">
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-marker">1</div>
+                        <div class="timeline-content">
+                            <h3>백엔드 기초</h3>
+                            <p>FastAPI 프로젝트 설정, SQLite DB 스키마 설계, Pydantic 모델 정의</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker">2</div>
+                        <div class="timeline-content">
+                            <h3>핵심 API 구현</h3>
+                            <p>일정 CRUD, OpenWeatherMap 연동, 날씨 캐시 전략, 경고/추천 서비스</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker">3</div>
+                        <div class="timeline-content">
+                            <h3>프론트엔드 구현</h3>
+                            <p>월간 캘린더 렌더링, 브리핑 카드, 일정 모달, 키워드 자동 분류</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker">4</div>
+                        <div class="timeline-content">
+                            <h3>기상청 API 전환</h3>
+                            <p>OpenWeatherMap → 기상청 ASOS(과거) + 단기예보 + 중기예보 3개 API 통합, 전국 16개 도시 지원</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker">5</div>
+                        <div class="timeline-content">
+                            <h3>UI 개편 + PWA</h3>
+                            <p>앱 스타일 레이아웃, PC/모바일 반응형, 날씨별 테마 배경, 홈 화면 설치 지원</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker">6</div>
+                        <div class="timeline-content">
+                            <h3>소셜 로그인 + 사용자 분리</h3>
+                            <p>Google/카카오 OAuth, 사용자별 일정 분리, 게스트 모드 지원</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker">7</div>
+                        <div class="timeline-content">
+                            <h3>배포 + 디버깅</h3>
+                            <p>Render 배포, OAuth 환경변수 설정, 배포 환경 디버그 엔드포인트 추가</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 주요 의사결정 -->
+        <section class="about-section">
+            <h2>주요 의사결정</h2>
+            <div class="about-card">
+                <div class="decision-list">
+                    <div class="decision-item">
+                        <div class="decision-q">날씨를 서비스의 어디에 둘 것인가?</div>
+                        <div class="decision-a">날씨를 <strong>메인이 아닌 가중치(Sub)</strong>로 활용. 기존 날씨앱과 차별화하기 위해, 날씨 자체를 보여주기보다 내 일정에 "영향을 주는 정보"로 포지셔닝함.</div>
+                    </div>
+                    <div class="decision-item">
+                        <div class="decision-q">왜 OpenWeatherMap에서 기상청 API로 바꿨나?</div>
+                        <div class="decision-a">OpenWeatherMap 무료 플랜은 5일 예보만 가능하고 과거 날씨를 조회할 수 없음. 기상청 API는 과거(ASOS) + 단기(3일) + 중기(10일) 모두 무료로 제공해서 데이터 범위가 훨씬 넓어짐.</div>
+                    </div>
+                    <div class="decision-item">
+                        <div class="decision-q">왜 바닐라 JS로 만들었나?</div>
+                        <div class="decision-a">React/Vue 같은 프레임워크를 쓰면 학습 비용이 추가됨. PM 입장에서 서버와 DB를 이해하는 것이 목표이므로, 프론트엔드는 최대한 단순하게 유지.</div>
+                    </div>
+                    <div class="decision-item">
+                        <div class="decision-q">게스트 모드를 왜 추가했나?</div>
+                        <div class="decision-a">로그인이 필수이면 서비스 진입 장벽이 높아짐. "먼저 써보고, 마음에 들면 로그인"하는 흐름이 자연스러워서 게스트 모드를 지원.</div>
+                    </div>
+                    <div class="decision-item">
+                        <div class="decision-q">SQLite를 쓴 이유는?</div>
+                        <div class="decision-a">학습 목적의 과제이므로, 별도 설치 없이 Python 내장 모듈로 바로 사용할 수 있는 SQLite가 적합. 다만 Render 배포 시 재배포마다 DB가 초기화되는 한계가 있음.</div>
+                    </div>
+                    <div class="decision-item">
+                        <div class="decision-q">AI 도구를 어떻게 활용했나?</div>
+                        <div class="decision-a">비개발자(PM)가 Claude Code를 활용하여 개발을 진행. 아이디어 구체화 → 설계 문서 작성 → 구현 계획 → 단계별 실행 → 코드 리뷰 → 검증의 6단계 워크플로우를 따름.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 프로젝트 정보 -->
+        <section class="about-section">
+            <h2>프로젝트 정보</h2>
+            <div class="about-card">
+                <div class="project-info">
+                    <div class="info-row">
+                        <span class="info-label">프로젝트</span>
+                        <span class="info-value">PM AI Lab — 동아리 과제 #03</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">개발 기간</span>
+                        <span class="info-value">2026년 3월 (약 1주)</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">개발 도구</span>
+                        <span class="info-value">Claude Code (Anthropic)</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">개발 방식</span>
+                        <span class="info-value">Superpowers 6단계 워크플로우</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="site-footer">
+        <p>WeatherCal — PM AI Lab 동아리 과제 #03</p>
+    </footer>
+</body>
+</html>

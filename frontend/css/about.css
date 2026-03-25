@@ -1,0 +1,297 @@
+/**
+ * Role: About 페이지 전용 스타일
+ * Key Features: 히어로, 타임라인, 기술스택 그리드, 의사결정 카드
+ * Dependencies: style.css (공통 헤더/푸터 스타일)
+ */
+
+/* === About 컨테이너 === */
+.about-container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 20px 40px;
+}
+
+/* === 히어로 === */
+.about-hero {
+    text-align: center;
+    padding: 48px 0 32px;
+}
+
+.about-hero h1 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #4a90d9;
+    letter-spacing: -0.5px;
+}
+
+.about-tagline {
+    font-size: 1.1rem;
+    color: #888;
+    margin-top: 8px;
+}
+
+/* === 섹션 공통 === */
+.about-section {
+    margin-top: 36px;
+}
+
+.about-section h2 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 14px;
+    padding-left: 2px;
+}
+
+.about-card {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+
+.about-card > p {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: #444;
+}
+
+/* === 서비스 개요 컨셉 리스트 === */
+.about-concept-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 20px;
+}
+
+.concept-item {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+}
+
+.concept-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+    width: 36px;
+    text-align: center;
+}
+
+.concept-item strong {
+    font-size: 0.95rem;
+    display: block;
+    margin-bottom: 2px;
+}
+
+.concept-item p {
+    font-size: 0.85rem;
+    color: #666;
+    line-height: 1.5;
+}
+
+/* === 기술 스택 그리드 === */
+.tech-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.tech-item {
+    padding: 14px;
+    background: #f8f9fb;
+    border-radius: 12px;
+}
+
+.tech-label {
+    font-size: 0.75rem;
+    color: #4a90d9;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.tech-value {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-top: 4px;
+    color: #333;
+}
+
+.tech-desc {
+    font-size: 0.8rem;
+    color: #888;
+    margin-top: 4px;
+    line-height: 1.4;
+}
+
+/* === 데이터 구조 === */
+.db-schema {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+}
+
+.db-table {
+    width: 100%;
+    max-width: 360px;
+    padding: 14px 18px;
+    background: #f8f9fb;
+    border-radius: 10px;
+    border-left: 3px solid #4a90d9;
+}
+
+.db-table-name {
+    font-size: 0.95rem;
+    font-weight: 700;
+    font-family: 'Courier New', monospace;
+    color: #333;
+}
+
+.db-table-desc {
+    font-size: 0.8rem;
+    color: #888;
+    margin-top: 2px;
+}
+
+.db-arrow {
+    font-size: 1.2rem;
+    color: #bbb;
+}
+
+/* === 타임라인 === */
+.timeline {
+    position: relative;
+    padding-left: 48px;
+}
+
+/* 세로선 */
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 18px;
+    top: 4px;
+    bottom: 4px;
+    width: 2px;
+    background: #e0e4ea;
+}
+
+.timeline-item {
+    position: relative;
+    padding-bottom: 24px;
+}
+.timeline-item:last-child { padding-bottom: 0; }
+
+.timeline-marker {
+    position: absolute;
+    left: -48px;
+    top: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #4a90d9;
+    color: white;
+    font-size: 0.85rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+}
+
+.timeline-content h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 4px;
+    padding-top: 6px;
+}
+
+.timeline-content p {
+    font-size: 0.85rem;
+    color: #666;
+    line-height: 1.6;
+}
+
+/* === 의사결정 === */
+.decision-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.decision-item {
+    padding-bottom: 20px;
+    border-bottom: 1px solid #f0f0f0;
+}
+.decision-item:last-child {
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.decision-q {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 6px;
+}
+
+.decision-q::before {
+    content: 'Q. ';
+    color: #4a90d9;
+}
+
+.decision-a {
+    font-size: 0.85rem;
+    color: #555;
+    line-height: 1.7;
+}
+
+/* === 프로젝트 정보 === */
+.project-info {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.info-row {
+    display: flex;
+    gap: 16px;
+    align-items: baseline;
+}
+
+.info-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #888;
+    min-width: 90px;
+    flex-shrink: 0;
+}
+
+.info-value {
+    font-size: 0.9rem;
+    color: #333;
+}
+
+/* === 푸터 (공통) === */
+.site-footer {
+    text-align: center;
+    padding: 24px 20px;
+    color: #aaa;
+    font-size: 0.8rem;
+    border-top: 1px solid #eee;
+    margin-top: 20px;
+}
+
+/* === 모바일 대응 === */
+@media (max-width: 768px) {
+    .about-hero { padding: 32px 0 24px; }
+    .about-hero h1 { font-size: 1.8rem; }
+    .about-tagline { font-size: 1rem; }
+
+    .about-card { padding: 18px; }
+
+    .tech-grid {
+        grid-template-columns: 1fr;
+    }
+}
