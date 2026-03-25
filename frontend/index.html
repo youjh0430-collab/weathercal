@@ -161,10 +161,7 @@
                 document.getElementById('logout-btn').style.display = 'inline';
                 document.title = `WeatherCal — ${data.name}`;
             } else {
-                // 게스트 모드 — 일정 추가 기능 숨김
-                document.getElementById('add-schedule-btn').style.display = 'none';
-                document.getElementById('add-schedule-date-btn').style.display = 'none';
-                // 로그인 버튼 표시
+                // 게스트 모드 — 일정 등록 허용, 로그인 버튼만 표시
                 document.getElementById('logout-btn').textContent = '로그인';
                 document.getElementById('logout-btn').href = '/login.html';
                 document.getElementById('logout-btn').style.display = 'inline';
