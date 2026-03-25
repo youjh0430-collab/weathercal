@@ -7,7 +7,7 @@ import os
 import httpx
 from urllib.parse import urlencode
 from fastapi import APIRouter, Request, Response, HTTPException
-from fastapi.responses import RedirectResponse
+from fastapi.responses import RedirectResponse, JSONResponse
 from itsdangerous import URLSafeSerializer
 from database import get_connection
 
@@ -86,6 +86,27 @@ def _upsert_user(provider: str, provider_id: str, name: str, profile_image: str 
     return user_id
 
 
+# === 디버그용 — 배포 환경 OAuth 설정 확인 ===
+
+@router.get("/debug")
+def auth_debug(request: Request):
+    """OAuth 설정 상태 확인 — 문제 진단용"""
+    base_url = _get_base_url(request)
+    return {
+        "base_url": base_url,
+        "google_redirect_uri": f"{base_url}/api/auth/google/callback",
+        "kakao_redirect_uri": f"{base_url}/api/auth/kakao/callback",
+        "google_client_id_set": bool(GOOGLE_CLIENT_ID),
+        "kakao_client_id_set": bool(KAKAO_CLIENT_ID),
+        "google_client_secret_set": bool(GOOGLE_CLIENT_SECRET),
+        "headers": {
+            "x-forwarded-proto": request.headers.get("x-forwarded-proto"),
+            "x-forwarded-host": request.headers.get("x-forwarded-host"),
+            "host": request.headers.get("host"),
+        }
+    }
+
+
 # === 현재 사용자 정보 API ===
 
 @router.get("/me")
@@ -128,7 +149,13 @@ async def google_callback(request: Request, code: str):
         })
 
     if token_res.status_code != 200:
-        raise HTTPException(400, "Google 로그인에 실패했습니다")
+        # 실제 에러 내용 표시 — 디버깅용
+        return JSONResponse(status_code=400, content={
+            "error": "Google 토큰 교환 실패",
+            "status": token_res.status_code,
+            "detail": token_res.json(),
+            "redirect_uri_used": f"{base_url}/api/auth/google/callback",
+        })
 
     access_token = token_res.json().get("access_token")
 
@@ -140,7 +167,10 @@ async def google_callback(request: Request, code: str):
         )
 
     if user_res.status_code != 200:
-        raise HTTPException(400, "사용자 정보 조회에 실패했습니다")
+        return JSONResponse(status_code=400, content={
+            "error": "Google 사용자 정보 조회 실패",
+            "detail": user_res.json(),
+        })
 
     user_info = user_res.json()
     user_id = _upsert_user(
@@ -184,7 +214,12 @@ async def kakao_callback(request: Request, code: str):
         })
 
     if token_res.status_code != 200:
-        raise HTTPException(400, "카카오 로그인에 실패했습니다")
+        return JSONResponse(status_code=400, content={
+            "error": "카카오 토큰 교환 실패",
+            "status": token_res.status_code,
+            "detail": token_res.json(),
+            "redirect_uri_used": f"{base_url}/api/auth/kakao/callback",
+        })
 
     access_token = token_res.json().get("access_token")
 
@@ -196,7 +231,10 @@ async def kakao_callback(request: Request, code: str):
         )
 
     if user_res.status_code != 200:
-        raise HTTPException(400, "사용자 정보 조회에 실패했습니다")
+        return JSONResponse(status_code=400, content={
+            "error": "카카오 사용자 정보 조회 실패",
+            "detail": user_res.json(),
+        })
 
     user_info = user_res.json()
     kakao_id = str(user_info["id"])
