@@ -3,17 +3,17 @@ Role: API 요청/응답 데이터 스키마 정의
 Key Features: 일정 CRUD 스키마, 날씨 스키마, 브리핑 스키마
 Dependencies: pydantic
 """
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional
 
 
 class ScheduleCreate(BaseModel):
-    """일정 등록/수정 요청"""
-    title: str
-    date: str
-    time: Optional[str] = None
-    category: str = "indoor"
-    memo: Optional[str] = None
+    """일정 등록/수정 요청 — 입력 길이 및 형식 제한"""
+    title: str = Field(..., min_length=1, max_length=200)
+    date: str = Field(..., pattern=r"^\d{4}-\d{2}-\d{2}$")
+    time: Optional[str] = Field(None, pattern=r"^\d{2}:\d{2}$")
+    category: str = Field("indoor", pattern=r"^(indoor|outdoor)$")
+    memo: Optional[str] = Field(None, max_length=1000)
 
 
 class ScheduleResponse(BaseModel):

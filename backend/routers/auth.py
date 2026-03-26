@@ -4,6 +4,7 @@ Key Features: OAuth 리다이렉트, 콜백 처리, 세션 쿠키 발급, 로그
 Dependencies: httpx, itsdangerous, database
 """
 import os
+import secrets
 import httpx
 from urllib.parse import urlencode
 from fastapi import APIRouter, Request, Response, HTTPException
@@ -17,8 +18,12 @@ GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
 GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
 KAKAO_CLIENT_ID = os.getenv("KAKAO_CLIENT_ID")
 
-# 세션 서명용 시크릿 — 환경변수 없으면 기본값 사용
-SESSION_SECRET = os.getenv("SESSION_SECRET", "weathercal-session-secret-key")
+# 세션 서명용 시크릿 — 환경변수 필수, 미설정 시 랜덤 생성 (재시작마다 세션 초기화됨)
+SESSION_SECRET = os.getenv("SESSION_SECRET")
+if not SESSION_SECRET:
+    import logging
+    SESSION_SECRET = secrets.token_urlsafe(32)
+    logging.warning("SESSION_SECRET 환경변수 미설정 — 임시 시크릿 사용 중 (재시작 시 세션 초기화)")
 serializer = URLSafeSerializer(SESSION_SECRET)
 
 COOKIE_NAME = "session"
@@ -86,11 +91,14 @@ def _upsert_user(provider: str, provider_id: str, name: str, profile_image: str 
     return user_id
 
 
-# === 디버그용 — 배포 환경 OAuth 설정 확인 ===
+# === 디버그용 — 로컬 환경에서만 노출 ===
 
 @router.get("/debug")
 def auth_debug(request: Request):
-    """OAuth 설정 상태 확인 — 문제 진단용"""
+    """OAuth 설정 상태 확인 — 로컬 환경에서만 접근 가능"""
+    # 프로덕션 환경에서는 접근 차단
+    if os.getenv("RENDER") or os.getenv("ENVIRONMENT") == "production":
+        raise HTTPException(status_code=404, detail="Not Found")
     base_url = _get_base_url(request)
     return {
         "base_url": base_url,
@@ -99,11 +107,6 @@ def auth_debug(request: Request):
         "google_client_id_set": bool(GOOGLE_CLIENT_ID),
         "kakao_client_id_set": bool(KAKAO_CLIENT_ID),
         "google_client_secret_set": bool(GOOGLE_CLIENT_SECRET),
-        "headers": {
-            "x-forwarded-proto": request.headers.get("x-forwarded-proto"),
-            "x-forwarded-host": request.headers.get("x-forwarded-host"),
-            "host": request.headers.get("host"),
-        }
     }
 
 
@@ -122,20 +125,28 @@ def get_me(request: Request):
 
 @router.get("/google/login")
 def google_login(request: Request):
-    """Google 로그인 페이지로 리다이렉트"""
+    """Google 로그인 페이지로 리다이렉트 — state 파라미터로 CSRF 방지"""
     base_url = _get_base_url(request)
+    state = secrets.token_urlsafe(32)
     params = {
         "client_id": GOOGLE_CLIENT_ID,
         "redirect_uri": f"{base_url}/api/auth/google/callback",
         "response_type": "code",
         "scope": "openid email profile",
+        "state": state,
     }
-    return RedirectResponse(f"https://accounts.google.com/o/oauth2/v2/auth?{urlencode(params)}")
+    response = RedirectResponse(f"https://accounts.google.com/o/oauth2/v2/auth?{urlencode(params)}")
+    response.set_cookie("oauth_state", state, httponly=True, secure=True, samesite="lax", max_age=600)
+    return response
 
 
 @router.get("/google/callback")
-async def google_callback(request: Request, code: str):
-    """Google OAuth 콜백 — 토큰 교환 + 사용자 정보 조회"""
+async def google_callback(request: Request, code: str, state: str = ""):
+    """Google OAuth 콜백 — state 검증 + 토큰 교환 + 사용자 정보 조회"""
+    # state 파라미터 검증 — OAuth CSRF 방지
+    cookie_state = request.cookies.get("oauth_state")
+    if not cookie_state or state != cookie_state:
+        return JSONResponse(status_code=400, content={"error": "잘못된 인증 요청입니다. 다시 로그인해주세요."})
     base_url = _get_base_url(request)
 
     # 인가 코드로 액세스 토큰 교환
@@ -182,6 +193,7 @@ async def google_callback(request: Request, code: str):
 
     response = RedirectResponse("/")
     _set_session_cookie(response, user_id)
+    response.delete_cookie("oauth_state")
     return response
 
 
@@ -189,19 +201,27 @@ async def google_callback(request: Request, code: str):
 
 @router.get("/kakao/login")
 def kakao_login(request: Request):
-    """카카오 로그인 페이지로 리다이렉트"""
+    """카카오 로그인 페이지로 리다이렉트 — state 파라미터로 CSRF 방지"""
     base_url = _get_base_url(request)
+    state = secrets.token_urlsafe(32)
     params = {
         "client_id": KAKAO_CLIENT_ID,
         "redirect_uri": f"{base_url}/api/auth/kakao/callback",
         "response_type": "code",
+        "state": state,
     }
-    return RedirectResponse(f"https://kauth.kakao.com/oauth/authorize?{urlencode(params)}")
+    response = RedirectResponse(f"https://kauth.kakao.com/oauth/authorize?{urlencode(params)}")
+    response.set_cookie("oauth_state", state, httponly=True, secure=True, samesite="lax", max_age=600)
+    return response
 
 
 @router.get("/kakao/callback")
-async def kakao_callback(request: Request, code: str):
-    """카카오 OAuth 콜백 — 토큰 교환 + 사용자 정보 조회"""
+async def kakao_callback(request: Request, code: str, state: str = ""):
+    """카카오 OAuth 콜백 — state 검증 + 토큰 교환 + 사용자 정보 조회"""
+    # state 파라미터 검증 — OAuth CSRF 방지
+    cookie_state = request.cookies.get("oauth_state")
+    if not cookie_state or state != cookie_state:
+        return JSONResponse(status_code=400, content={"error": "잘못된 인증 요청입니다. 다시 로그인해주세요."})
     base_url = _get_base_url(request)
 
     # 인가 코드로 액세스 토큰 교환
@@ -251,6 +271,7 @@ async def kakao_callback(request: Request, code: str):
 
     response = RedirectResponse("/")
     _set_session_cookie(response, user_id)
+    response.delete_cookie("oauth_state")
     return response
 
 

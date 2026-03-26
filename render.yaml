@@ -13,3 +13,9 @@ services:
         sync: false
       - key: KAKAO_CLIENT_ID
         sync: false
+      - key: ALLOWED_ORIGINS
+        value: https://weathercal.onrender.com
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: RENDER
+        value: "true"

@@ -19,6 +19,13 @@ const WEATHER_DARK_TEXT = ['snow', 'cloudy'];
 
 let currentBriefingDate = null;
 
+// HTML 특수문자 이스케이프 — XSS 방지용
+function escapeHtml(str) {
+    if (!str) return '';
+    const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+    return String(str).replace(/[&<>"']/g, c => map[c]);
+}
+
 function closeBriefing() {
     document.getElementById('briefing-panel').classList.add('hidden');
     document.getElementById('briefing-overlay').classList.add('hidden');
@@ -67,14 +74,14 @@ async function openBriefing(dateStr) {
             html += `
                 <div class="card schedule-card">
                     <div class="schedule-header">
-                        <span class="schedule-time">📌 ${timeStr}</span>
-                        <span class="schedule-title">${s.title}</span>
+                        <span class="schedule-time">📌 ${escapeHtml(timeStr)}</span>
+                        <span class="schedule-title">${escapeHtml(s.title)}</span>
                         <span class="schedule-category ${s.category}">${s.category === 'outdoor' ? '야외' : '실내'}</span>
                     </div>
                     ${warningHtml}
                     <div class="schedule-actions">
-                        <button class="btn-small" onclick="editSchedule(${s.id})">수정</button>
-                        <button class="btn-small btn-danger" onclick="deleteScheduleAndRefresh(${s.id})">삭제</button>
+                        <button class="btn-small" onclick="editSchedule(${parseInt(s.id)})">수정</button>
+                        <button class="btn-small btn-danger" onclick="deleteScheduleAndRefresh(${parseInt(s.id)})">삭제</button>
                     </div>
                 </div>
             `;
